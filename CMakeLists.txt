@@ -46,7 +46,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC" AND MSVC_TOOLSET_VERSION GREATER_EQUAL 1
 endif()
 
 if(NOT COMPILER_IS_MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wall -Wextra")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wall -Wextra -ggdb -O0")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wcast-align -Wunreachable-code -g -O0 -fno-omit-frame-pointer")
     # ADDITIONAL DEBUG FLAGS
     # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wstrict-null-sentinel -Wstrict-overflow=5 -Wundef -Wno-unused  -Wswitch-enum")
@@ -484,7 +484,7 @@ elseif(WIN32)
         src/joykeyrepeathelper.h
     )
     LIST(APPEND antimicrox_FORMS
-        src/gui/winappprofiletimerdialog.ui    
+        src/gui/winappprofiletimerdialog.ui
     )
 endif(UNIX)
 
@@ -527,7 +527,7 @@ else()
 endif()
 
 if (Qt6_FOUND OR NOT Qt5_FOUND)
-    find_package(Qt6 ${QT_REQUIRED_VERSION} 
+    find_package(Qt6 ${QT_REQUIRED_VERSION}
         COMPONENTS Core Widgets Gui Network LinguistTools Concurrent
         REQUIRED)
     find_package(QT NAMES Qt6 REQUIRED) # used to get version number in QT_VERSION_MAJOR and QT_VERSION
@@ -535,7 +535,7 @@ if (Qt6_FOUND OR NOT Qt5_FOUND)
     QT_WRAP_UI(antimicrox_FORMS_HEADERS ${antimicrox_FORMS})
     QT_ADD_RESOURCES(antimicrox_RESOURCES_RCC ${antimicrox_RESOURCES})
 else()
-    find_package(Qt5 ${QT_REQUIRED_VERSION} 
+    find_package(Qt5 ${QT_REQUIRED_VERSION}
         COMPONENTS Core Widgets Gui Network LinguistTools Concurrent
         REQUIRED)
     find_package(QT NAMES Qt5 REQUIRED) # used to get version number in QT_VERSION_MAJOR and QT_VERSION
@@ -725,7 +725,7 @@ if(WIN32)
             "${CMAKE_CURRENT_BINARY_DIR}/bin/libEGL.dll"
             )
     endif(QT_VERSION_MAJOR EQUAL 5)
-    
+
 
     if(CHECK_FOR_UPDATES)
         message("Searching for SSL DLL-s.")

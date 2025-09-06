@@ -1071,20 +1071,33 @@ void InputDaemon::secondInputPass(QQueue<SDL_Event> *sdlEventQueue)
         case SDL_JOYAXISMOTION: {
             InputDevice *joy = getTrackjoysticksLocal().value(event.jaxis.which);
 
+
             if (joy != nullptr)
             {
                 SetJoystick *set = joy->getActiveSetJoystick();
                 JoyAxis *axis = set->getJoyAxis(event.jaxis.axis);
 
+                static int prev = 0;
+                int delta = 1 << 9;
+
+                if (event.jaxis.value < prev) {
+                    delta = delta * -1;
+                }
+
+                prev = event.jaxis.value;
+
                 if (axis != nullptr)
                 {
-                    axis->queuePendingEvent(event.jaxis.value);
+                    // DEBUG() << event.jaxis.value;
+                    axis->queuePendingEvent(delta);
+                    // axis->queuePendingEvent(event.jaxis.value);
 
                     if (!activeDevices.contains(event.jaxis.which))
                         activeDevices.insert(event.jaxis.which, joy);
                 }
 
-                joy->rawAxisEvent(event.jaxis.which, event.jaxis.value);
+                // joy->rawAxisEvent(event.jaxis.which, event.jaxis.value);
+                joy->rawAxisEvent(event.jaxis.which, delta);
             } else if (trackcontrollers.contains(event.jaxis.which))
             {
                 GameController *gamepad = trackcontrollers.value(event.jaxis.which);

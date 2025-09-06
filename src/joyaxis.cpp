@@ -134,6 +134,7 @@ void JoyAxis::joyEvent(int value, bool ignoresets, bool updateLastValues)
         stickPassEvent(value, ignoresets, updateLastValues);
     } else
     {
+        // value = value % (deadZone + 1);
         if (updateLastValues)
         {
             lastKnownThottledValue = currentThrottledValue;
@@ -157,6 +158,30 @@ void JoyAxis::joyEvent(int value, bool ignoresets, bool updateLastValues)
             currentThrottledValue = calculateThrottledValue(value);
         }
 
+        // if (safezone && !isActive)
+        // {
+        //     /* Send event */
+        //     isActive = eventActive = true;
+        //     emit active(value);
+        //     createDeskEvent(ignoresets);
+
+        //     /* Release */
+        //     isActive = eventActive = false;
+        //     emit released(value);
+        //     createDeskEvent(ignoresets);
+
+        //     if (updateLastValues)
+        //     {
+        //         lastKnownThottledValue = currentThrottledValue;
+        //         lastKnownRawValue = currentRawValue;
+        //     }
+        //     setCurrentRawValue(0);
+        //     currentThrottledValue = calculateThrottledValue(value);
+        // } else if (isActive)
+        // {
+        //     createDeskEvent(ignoresets);
+        // }
+
         if (safezone && !isActive)
         {
             isActive = eventActive = true;
@@ -171,6 +196,7 @@ void JoyAxis::joyEvent(int value, bool ignoresets, bool updateLastValues)
         {
             createDeskEvent(ignoresets);
         }
+
     }
 
     emit moved(currentRawValue);
@@ -319,6 +345,8 @@ int JoyAxis::getIndex() { return m_index; }
 void JoyAxis::createDeskEvent(bool ignoresets)
 {
     JoyAxisButton *eventbutton = nullptr;
+
+    DEBUG() << currentThrottledValue;
 
     if (currentThrottledValue > deadZone)
         eventbutton = paxisbutton;

@@ -338,6 +338,7 @@ void GameController::rawButtonEvent(int index, bool pressed)
 
 void GameController::rawAxisEvent(int index, int value)
 {
+    static int previous = 0;
     bool knownaxis = getAxisvalues().contains(index);
 
     if (!knownaxis && (fabs(value) > rawAxisDeadZone))

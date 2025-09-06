@@ -179,6 +179,8 @@ void JoyButton::joyEvent(bool pressed, bool ignoresets)
         DEBUG() << "Processing JoyButton::joyEvent for: " << getName() << " SDL index: " << m_index_sdl
                 << " className: " << metaObject()->className();
 
+    static float delta = 0.0;
+
     if ((m_vdpad != nullptr) && !pendingEvent)
     {
         vdpadPassEvent(pressed, ignoresets);
@@ -193,13 +195,16 @@ void JoyButton::joyEvent(bool pressed, bool ignoresets)
     {
         if (pressed != isDown)
         {
+            DEBUG() << "1";
             if (pressed)
             {
+                DEBUG() << "3";
                 emit clicked(m_index_sdl);
                 if (updateInitAccelValues)
                     oldAccelMulti = updateOldAccelMulti = accelTravel = 0.0;
             } else
             {
+                DEBUG() << "4";
                 emit released(m_index_sdl);
             }
 
@@ -208,6 +213,7 @@ void JoyButton::joyEvent(bool pressed, bool ignoresets)
 
             if (m_toggle && pressed)
             {
+                DEBUG() << "5";
                 isDown = true;
                 toggleActiveState = !toggleActiveState;
 
@@ -224,6 +230,7 @@ void JoyButton::joyEvent(bool pressed, bool ignoresets)
                 }
             } else if (m_toggle && !pressed && isDown)
             {
+                DEBUG() << "6";
                 isDown = false;
 
                 if (!toggleActiveState)
@@ -236,6 +243,7 @@ void JoyButton::joyEvent(bool pressed, bool ignoresets)
                 }
             } else
             {
+                DEBUG() << "7";
                 m_ignoresets = ignoresets;
                 isButtonPressed = isDown = pressed;
 
@@ -293,8 +301,10 @@ void JoyButton::joyEvent(bool pressed, bool ignoresets)
                 updateMouseParams(false, false, 0.0);
         } else if (!m_useTurbo && isButtonPressed)
         {
+            DEBUG() << "2";
             resetAccelerationDistances();
             currentAccelerationDistance = getAccelerationDistance();
+            DEBUG() << currentAccelerationDistance;
 
             if (!setChangeTimer.isActive())
                 updateParamsAfterDistEvent();
