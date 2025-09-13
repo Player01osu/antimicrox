@@ -1080,7 +1080,10 @@ void InputDaemon::secondInputPass(QQueue<SDL_Event> *sdlEventQueue)
                 static int prev = 0;
                 int delta = 1 << 9;
 
-                if (event.jaxis.value < prev) {
+
+                int diff = event.jaxis.value - prev;
+                printf("jaxis: %d, prev: %d, diff: %d\n", event.jaxis.value, prev, diff);
+                if ((event.jaxis.value < prev || diff > 30000) && diff > -30000) {
                     delta = delta * -1;
                 }
 
